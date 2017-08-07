@@ -151,7 +151,21 @@ export default function ScenesReducer(
     }
   };
 
-  staleScenes.forEach(mergeScene);
+  // Work around for flashing scenes
+  // see https://github.com/react-community/react-navigation/issues/1493
+  let k = null;
+  let v = null;
+  staleScenes.forEach(scene => {
+    let {key} = scene;
+    k = key;
+    v = scene;
+  });
+
+  newStaleScenes = k && v ? new Map([[k, v]]) : new Map();
+  newStaleScenes.forEach(mergeScene);
+  // staleScenes.forEach(mergeScene);
+  // work around end
+
   freshScenes.forEach(mergeScene);
 
   nextScenes.sort(compareScenes);
