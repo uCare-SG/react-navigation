@@ -77,6 +77,10 @@ class Header extends React.PureComponent<void, HeaderProps, HeaderState> {
       .headerTruncatedBackTitle;
   }
 
+  _navigateBack = () => {
+    this.props.navigation.goBack(null);
+  };
+
   _renderTitleComponent = (props: SceneProps) => {
     const details = this.props.getScreenDetails(props.scene);
     const headerTitle = details.options.headerTitle;
@@ -111,9 +115,13 @@ class Header extends React.PureComponent<void, HeaderProps, HeaderState> {
     );
   };
 
-  _renderLeftComponent = (props: SceneProps) => {
-    const options = this.props.getScreenDetails(props.scene).options;
-    if (typeof options.headerLeft !== 'undefined') {
+  _renderLeftComponent = (props: SceneProps): ?React.Node => {
+    // $FlowFixMe
+    const { options } = this.props.getScreenDetails(props.scene);
+    if (
+      React.isValidElement(options.headerLeft) ||
+      options.headerLeft === null
+    ) {
       return options.headerLeft;
     }
     if (props.scene.index === 0) {
@@ -126,11 +134,10 @@ class Header extends React.PureComponent<void, HeaderProps, HeaderState> {
     const width = this.state.widths[props.scene.key]
       ? (this.props.layout.initWidth - this.state.widths[props.scene.key]) / 2
       : undefined;
+    const RenderedLeftComponent = options.headerLeft || HeaderBackButton;
     return (
-      <HeaderBackButton
-        onPress={() => {
-          this.props.navigation.goBack(null);
-        }}
+      <RenderedLeftComponent
+        onPress={this._navigateBack}
         pressColorAndroid={options.headerPressColorAndroid}
         tintColor={options.headerTintColor}
         title={backButtonTitle}
