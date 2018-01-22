@@ -55,7 +55,8 @@ export default function withCachedChildNavigation<
           return;
         }
         this._childNavigationProps[route.key] = addNavigationHelpers({
-          dispatch: navigation.dispatch,
+          // dispatch: navigation.dispatch,
+          ...navigation,
           state: route,
         });
       });

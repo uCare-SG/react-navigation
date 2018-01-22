@@ -148,7 +148,8 @@ export default class DrawerView extends React.PureComponent<
       return;
     }
     this._screenNavigationProp = addNavigationHelpers({
-      dispatch: navigation.dispatch,
+      // dispatch: navigation.dispatch,
+      ...navigation,
       state: navigationState,
     });
   };
